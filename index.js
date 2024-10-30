@@ -1,10 +1,18 @@
 const dotenv = require("dotenv");
 const { MezonClient } = require("mezon-sdk");
+const { GoogleGenerativeAI } = require("@google/generative-ai")
 
 dotenv.config();
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const UNSPLASH_ACCESS_KEY = "6u8mpENI08iusPsoRp7IpJUDoTMBbsx-CY-EAieEdxU";
+const MEZON_CLIENT_TOKEN = "564951526a4e36745533437a48522d43"
+const GEMINI_API_KEY = "AIzaSyAeWaLxpxUJbb49PO5-k5c2hhGC5VjE5eQ"
+
+async function geminiCallApi(model, prompt) {
+    const result = await model.generateContent(prompt);
+    return result.response.text();
+}
 
 async function searchImage(query) {
     try {
@@ -30,12 +38,45 @@ async function searchImage(query) {
 }
 
 async function main() {
-    const client = new MezonClient(process.env.APPLICATION_TOKEN);
+    const client = new MezonClient(MEZON_CLIENT_TOKEN);
+    const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     await client.authenticate();
 
     client.on("channel_message", async (event) => {
-        console.log("event", event);
+        console.log(event?.content);
+        
+        if (event?.content?.t && event.content.t !== '{}' && event.content.t.startsWith('*meai')) {
+            const inputString = event.content.t;
+            const secondPart = inputString.substring(6);
+
+            const message =await geminiCallApi(model, secondPart);
+            await client.sendMessage(
+                event?.clan_id,
+                event?.channel_id,
+                2,
+                event?.is_public,
+                { t : message},
+                [],
+                [],
+                [
+                    {
+                        message_id: '',
+                        message_ref_id: event.message_id,
+                        ref_type: 0,
+                        message_sender_id: event.sender_id,
+                        message_sender_username: event.username,
+                        mesages_sender_avatar: event.avatar,
+                        message_sender_clan_nick: event.clan_nick,
+                        message_sender_display_name: event.display_name,
+                        content: JSON.stringify(event.content),
+                        has_attachment: true,
+                    },
+                ]
+            );
+
+        }
 
         if (event?.content?.t && event.content.t.startsWith("*anh")) {
             const command = event.content.t;
@@ -83,15 +124,15 @@ async function main() {
                         );
                     } else {
                         console.error("Image URL not found.");
-                        sendInvalidArgumentResponse(client,event);
+                        sendInvalidArgumentResponse(client, event);
                     }
                 } catch (error) {
                     console.error("Error searching for image:", error);
-                    sendInvalidArgumentResponse(client,event);
+                    sendInvalidArgumentResponse(client, event);
                 }
             } else {
                 console.error("Invalid argument provided.");
-                sendInvalidArgumentResponse(client,event);
+                sendInvalidArgumentResponse(client, event);
             }
         }
 
@@ -108,7 +149,7 @@ async function main() {
                     event?.channel_id,
                     2,
                     event?.is_public,
-                    {t: issueList},
+                    { t: issueList },
                     [],
                     [],
                     [
@@ -135,7 +176,7 @@ async function main() {
     });
 }
 
-function sendInvalidArgumentResponse(client,event) {
+function sendInvalidArgumentResponse(client, event) {
     client.sendMessage(
         event?.clan_id,
         event?.channel_id,
