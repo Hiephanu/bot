@@ -55,12 +55,12 @@ eg:
 
 ![image](https://github.com/user-attachments/assets/d72d8e33-8164-458b-8b1c-e4a76f726594)
 
-### bot weather forecast
+### 5. Bot weather forecast
 ```
 syntax:
 days included: homnay || ngaymai || ngaykia
 location included: hn1 || hn2 || hn3 || dn || v || qn || sg
-*tt + days + location
+*tt + day + location
 ```
 eg:
 
