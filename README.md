@@ -20,3 +20,11 @@ Copy `.env.example` to `.env` and replace it with your application token.
 # development
 $ yarn start
 ```# bot
+
+## Main function
+
+### bot *lam-tho
+### bot *meai
+### bot *text-to-image-v1
+### bot *text-to-image-v2
+### bot *tt
