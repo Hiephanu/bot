@@ -23,7 +23,11 @@ $ yarn start
 # bot
 ## Main function
 
-### bot *lam-tho
+### bot write poems describing images
+```
+```
+eg: ![image](https://github.com/user-attachments/assets/e07b8e36-3888-4862-92ac-24d14f10d775)
+
 ### bot *meai
 ### bot *text-to-image-v1
 ### bot *text-to-image-v2
