@@ -25,9 +25,9 @@ $ yarn start
 
 ### bot write poems describing images
 ```
+syntax: *lam-tho + file image
 ```
-###eg: 
-
+eg: 
 ![image](https://github.com/user-attachments/assets/e07b8e36-3888-4862-92ac-24d14f10d775)
 
 ### bot *meai
