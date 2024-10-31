@@ -19,8 +19,8 @@ Copy `.env.example` to `.env` and replace it with your application token.
 ```bash
 # development
 $ yarn start
-```# bot
-
+```
+# bot
 ## Main function
 
 ### bot *lam-tho
