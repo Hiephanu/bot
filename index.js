@@ -420,8 +420,7 @@ async function main() {
                         fs.writeFileSync(imagePath, buffer);
                         // const imageUrl = `http://localhost:${PORT}/images/${uniqueId}.jpg`;
                         const resultText = await query(`public/images/image-lam-tho.jpg`);
-                        const message = await geminiCallApi(model, "Hãy làm thơ với chủ đề này giúp tôi: " + resultText[0].generated_text);
-
+                        const message = await geminiCallApi(model, "Hãy làm thơ với chủ đề này giúp tôi: " + resultText[0].generated_text + " làm thơ với phong cách hài meme nha. chỉ cần trả về duy nhất là thơ");
                         sendValidArgumentResponse(client, event, message, {});
                     } catch (error) {
                         sendInvalidArgumentResponse(client, event);
